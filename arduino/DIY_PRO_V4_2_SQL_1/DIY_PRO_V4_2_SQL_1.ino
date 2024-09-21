@@ -87,10 +87,10 @@ boolean connectWIFI=true;
 
 
 // EISY config
-boolean connectSQLITE=false;           // Can be set to "false" to stop attempting to connect to EISY
+boolean connectSQLITE=true;           // Can be set to "false" to stop attempting to connect to EISY
 boolean connectAPI=true;              // Can be set to "false" to stop attempting to connect to the AirGradient API
 uint16_t portNumber = 4000;           // Can be replaced with any number 1024 - 49151
-IPAddress host(192,168,1,232);          // Replace with the local IP address of your eisy  Ex. IPAddress host(192,168,1,232)
+IPAddress host(192,168,1,3);          // Replace with the local IP address of your eisy  Ex. IPAddress host(192,168,1,232)
 
 
 // CONFIGURATION END
@@ -395,16 +395,16 @@ void sendToServer() {
       + (hum < 0 ? "" : ", \"rhum\":" + String(hum))
       + "}";
 
-      String payload2 = "{\"id\":" + String(ESP.getChipId(), HEX) + ", \"wifi\":" + String(WiFi.RSSI())
-      + (Co2 < 0 ? "" : ", \"rco2\":" + String(Co2))
-      + (pm01 < 0 ? "" : ", \"pm01\":" + String(pm01))
-      + (pm25 < 0 ? "" : ", \"pm02\":" + String(pm25))
-      + (pm10 < 0 ? "" : ", \"pm10\":" + String(pm10))
-      + (pm03PCount < 0 ? "" : ", \"pm003_count\":" + String(pm03PCount))
-      + (TVOC < 0 ? "" : ", \"tvoc_index\":" + String(TVOC))
-      + (NOX < 0 ? "" : ", \"nox_index\":" + String(NOX))
-      + ", \"atmp\":" + String(temp)
-      + (hum < 0 ? "" : ", \"rhum\":" + String(hum))
+      String payload2 = "{\"id\": \"" + String(ESP.getChipId(), HEX) + "\", \"wifi\": " + String(WiFi.RSSI())
+      + (Co2 < 0 ? "" : ", \"rco2\": " + String(Co2))
+      + (pm01 < 0 ? "" : ", \"pm01\": " + String(pm01))
+      + (pm25 < 0 ? "" : ", \"pm02\": " + String(pm25))
+      + (pm10 < 0 ? "" : ", \"pm10\": " + String(pm10))
+      + (pm03PCount < 0 ? "" : ", \"pm003_count\": " + String(pm03PCount))
+      + (TVOC < 0 ? "" : ", \"tvoc_index\": " + String(TVOC))
+      + (NOX < 0 ? "" : ", \"nox_index\": " + String(NOX))
+      + ", \"atmp\": " + String(temp)
+      + (hum < 0 ? "" : ", \"rhum\": " + String(hum))
       + "}";
 
 
