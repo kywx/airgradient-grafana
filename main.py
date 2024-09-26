@@ -14,20 +14,32 @@ import server
 
 
 if __name__ == "__main__":
-    # if no tables, make ag table and data packet table
+    # if no tables, make ag and data packet tables
     # if airgradient not in table, insert
-    # data packet for each air gradient
     # update master and ag when insert_datapacket
+
     conn = connect("master")
     cursor = conn.cursor()
+
+    try:
+        create_data_packet_table(cursor)
+    except sqlite3.OperationalError as e:
+        print("already exists")
+    
+    try:
+        create_ag_table(cursor)
+    except sqlite3.OperationalError as e:
+        print("already exists")
+
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
 
     with connect("master") as conn:
         cursor = conn.cursor()
         data = server.get_data("192.168.x.x", 4000)
-        insert_datapacket(cursor, data["id"], data["wifi"],
-                           data["rco2"], data["pm01"], data["pm02"],
-                             data["pm10"], data["pm003_count"], data["tvoc_index"], 
-                             data["nox_index"], data["atmp"], data["rhum"])
+        if data != 0:
+            insert_datapacket(cursor, data)
         cursor.close()

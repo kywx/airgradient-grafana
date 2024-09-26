@@ -1,9 +1,3 @@
-# takes the data and sorts it into a table
-# in the mini processor
-
-
-
-# database
 import sqlite3
 import datetime  # datetime.datetime.now
 
@@ -12,26 +6,8 @@ import datetime  # datetime.datetime.now
 def connect(name):
     """ If database does not exist, then it'll be created 
         returns a cursor to the database """
-    return sqlite3.connect(f'{name}.db')
+    return sqlite3.connect(f'{name}.db', isolation_level=None)
 
-
-"""
-cursor.execute(query)
-result = cursor.fetchall()
-result = cursor.fetchone()
-
-sqliteConnection.commit()
-cursor.close()
-
-try
-except sqlite3.Error
-finally
-if sqliteConnection:
-        sqliteConnection.close()
-        print('SQLite Connection closed')
-
-with conn: context manager would be nice too
-"""
 
 def create_master(cursor):
     query = """ CREATE TABLE Master (
@@ -77,11 +53,23 @@ def insert_airgradient(cursor, ag_id, name, time=datetime.datetime.now().replace
     cursor.execute(query, params)
 
 
-def insert_datapacket(cursor, ag_id, wifi, rco2, pm01, pm02, pm10, pm003, tvoc, nox, atmp, rhum, time=datetime.datetime.now().replace(microsecond=0)):
+
+def insert_datapacket(cursor, data, time=datetime.datetime.now().replace(microsecond=0)):
     query = f""" INSERT INTO DataPacket 
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?);"""
-    params = (ag_id, time, wifi, rco2, pm01, pm02, pm10, pm003, tvoc, nox, atmp, rhum)
+    params = (data["id"], time, data["wifi"], data["rco2"], data["pm01"], data["pm02"], data["pm10"], data["pm003_count"], data["tvoc_index"], data["nox_index"], data["atmp"], data["rhum"])
     cursor.execute(query, params)
+    
+    # check if air gradient exists in the table
+    cursor.execute("""Select ag_id from AirGradient""")
+    all = [row[0] for row in cursor]
+    if data["id"] not in all:
+        insert_airgradient(cursor, data["id"], data["id"])
+    
+    # update updated_at
+    update_ag(cursor, data["id"])
+    update_master(cursor)
+
 
 
 def update_master(cursor, time=datetime.datetime.now().replace(microsecond=0)):
@@ -94,6 +82,11 @@ def update_ag(cursor, ag_id, time=datetime.datetime.now().replace(microsecond=0)
     cursor.execute(query, (time, ag_id))
 
 
+def update_location_name(cursor, name, ag_id):
+    query = f""" UPDATE AirGradient Set location_name = ? WHERE ag_id = ?"""
+    cursor.execute(query, (name, ag_id))
+
+
 def drop_table(cursor, table):
     query = f""" Drop TABLE {table} """
     cursor.execute(query)
@@ -102,22 +95,3 @@ def drop_table(cursor, table):
 def truncate_table(cursor, table):
     query = f""" DELETE FROM {table} """
     cursor.execute(query)
-
-
-#if __name__ == "__main__":
-    #conn = connect("master")
-    #cursor = conn.cursor()
-
-    # cursor.execute("""Drop TABLE DataPacket""")
-
-    # create_data_packet_table(cursor)
-
-    # insert_datapacket(cursor, 1, -54, 707, 7, 13, 14, 1455, 104, 1, 20.59, 66)
-
-
-    # cursor.execute("""Select * from DataPacket""")
-    # print(cursor.fetchall())
-    
-    #conn.commit()
-    #cursor.close()
-    #conn.close()
