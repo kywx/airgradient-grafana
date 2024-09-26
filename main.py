@@ -31,15 +31,23 @@ if __name__ == "__main__":
     except sqlite3.OperationalError as e:
         print("already exists")
 
+    try:
+        create_master(cursor)
+    except sqlite3.OperationalError as e:
+        print("already exists")
+
     conn.commit()
     cursor.close()
     conn.close()
 
 
-
+    
     with connect("master") as conn:
-        cursor = conn.cursor()
-        data = server.get_data("192.168.x.x", 4000)
-        if data != 0:
-            insert_datapacket(cursor, data)
-        cursor.close()
+        while True:
+            cursor = conn.cursor()
+            data = server.get_data("192.168.0.3", 4000)
+            print(data)
+            if data != 0:
+                insert_datapacket(cursor, data)
+            cursor.close()
+            sleep(15)
