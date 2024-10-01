@@ -47,6 +47,28 @@ CC BY-SA 4.0 Attribution-ShareAlike 4.0 International License
 
 #include <U8g2lib.h>
 
+
+// InfluxDB Config
+#include <InfluxDbClient.h>
+#include <InfluxDbCloud.h>
+#define TZ_INFO "UTC"
+
+
+// edit below this line
+#define INFLUXDB_URL "https://us-east-1-1.aws.cloud2.influxdata.com"      // As it shows on your web browser
+#define INFLUXDB_TOKEN "FfSVI3SmPDt0I-s1PdwnxUw_jZnjTIwRRqRq2PQpdcgJRO0k6tPWZ6UU7OTC9aFXr_0a7DCxCTLLWs-SOsTGlw=="   // looks something like this
+#define INFLUXDB_ORG "Organization Name"    // Your organization name
+#define INFLUXDB_BUCKET "Bucket Name"       // Whatever you named the bucket you want to use
+Point sensor("Table Name");                 // Any name
+int dataInterval = 5;                          // interval of time between gathering air quality data in minutes
+boolean connectInfluxDB=true;     // set true to use InfluxDB and Grafana
+boolean connectAPI = true;        // set true to send data to AirGradient's API
+
+// don't edit below this line
+InfluxDBClient InfluxClient(INFLUXDB_URL, INFLUXDB_ORG, INFLUXDB_BUCKET, INFLUXDB_TOKEN, InfluxDbCloud2CACert);
+
+// AirGradient
+
 AirGradient ag = AirGradient();
 SensirionI2CSgp41 sgp41;
 VOCGasIndexAlgorithm voc_algorithm;
@@ -83,14 +105,6 @@ boolean displayTop = true;
 
 // set to true if you want to connect to wifi. You have 60 seconds to connect. Then it will go into an offline mode.
 boolean connectWIFI=true;
-
-
-
-// EISY config
-boolean connectSQLITE=true;           // Can be set to "false" to stop attempting to connect to EISY
-boolean connectAPI=true;              // Can be set to "false" to stop attempting to connect to the AirGradient API
-uint16_t portNumber = 4000;           // Can be replaced with any number 1024 - 49151
-IPAddress host(192,168,0,3);          // Replace with the local IP address of your eisy  Ex. IPAddress host(192,168,1,232)
 
 
 // CONFIGURATION END
@@ -170,6 +184,11 @@ void setup() {
   ag.CO2_Init();
   ag.PMS_Init();
   ag.TMP_RH_Init(0x44);
+
+  // InfluxDB Client check
+  // Add constant tags - only once
+  // sensor.addTag("device", String(ESP.getChipId(), HEX));
+  timeSync(TZ_INFO, "pool.ntp.org", "time.nis.gov");
 }
 
 void loop() {
@@ -180,7 +199,7 @@ void loop() {
   updatePm();
   updateTempHum();
   sendToServer();
-  delay(5000); // delays 5 seconds
+  delay(dataInterval*60*100);
 }
 
 void inConf(){
@@ -395,36 +414,36 @@ void sendToServer() {
       + (hum < 0 ? "" : ", \"rhum\":" + String(hum))
       + "}";
 
-      String payload2 = "{\"id\": \"" + String(ESP.getChipId(), HEX) + "\", \"wifi\": " + String(WiFi.RSSI())
-      + (Co2 < 0 ? "" : ", \"rco2\": " + String(Co2))
-      + (pm01 < 0 ? "" : ", \"pm01\": " + String(pm01))
-      + (pm25 < 0 ? "" : ", \"pm02\": " + String(pm25))
-      + (pm10 < 0 ? "" : ", \"pm10\": " + String(pm10))
-      + (pm03PCount < 0 ? "" : ", \"pm003_count\": " + String(pm03PCount))
-      + (TVOC < 0 ? "" : ", \"tvoc_index\": " + String(TVOC))
-      + (NOX < 0 ? "" : ", \"nox_index\": " + String(NOX))
-      + ", \"atmp\": " + String(temp)
-      + (hum < 0 ? "" : ", \"rhum\": " + String(hum))
-      + "}";
-
-
       if(WiFi.status()==WL_CONNECTED){
-        Serial.println(payload);
+        //Serial.println(payload);    //prints payload
         WiFiClient client;
 
-        if (connectSQLITE && client.connect(host, portNumber)) {
-          Serial.println("Connected to server");
-          client.println(payload2);
-          client.println();
-          Serial.println("Sent data to server");
-          /*  receiving data from client
-          if (client.available()) {
-            char c = client.read();
+        if (connectInfluxDB && InfluxClient.validateConnection()) {
+          sensor.clearFields();
+          sensor.addField("id", String(ESP.getChipId(), HEX));
+          sensor.addField("wifi", WiFi.RSSI());
+          sensor.addField("rco2", Co2);
+          sensor.addField("pm01", pm01);
+          sensor.addField("pm02", pm25);
+          sensor.addField("pm10", pm10);
+          sensor.addField("pm003_count", pm03PCount);
+          sensor.addField("tvoc_index", TVOC);
+          sensor.addField("nox_index", NOX);
+          sensor.addField("atmp", temp);
+          sensor.addField("rhum", hum);
+          // Print what we are writing to InfluxDB
+          Serial.print("Writing: ");
+          Serial.println(InfluxClient.pointToLineProtocol(sensor));
+          // Write point to InfluxDB
+          if (!InfluxClient.writePoint(sensor)) {
+            Serial.print("InfluxDB write failed: ");
+            Serial.println(InfluxClient.getLastErrorMessage());
+          } else {
+            Serial.println("Successfully writing to InfluxDB");
           }
-          */
-          client.stop();
         } else {
-          Serial.println("Not Connected to SQLITE");
+          // if can't connect, there is a problem with the client so check token, bucket name, organization name, and url
+          Serial.println("Not connected to InfluxDB");
         }
 
         if (connectAPI) {
