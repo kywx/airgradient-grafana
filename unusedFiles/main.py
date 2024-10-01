@@ -30,6 +30,11 @@ if __name__ == "__main__":
         create_ag_table(cursor)
     except sqlite3.OperationalError as e:
         print("already exists")
+    
+    try:
+        create_master(cursor)
+    except sqlite3.OperationalError as e:
+        print("already exists")
 
     try:
         create_master(cursor)

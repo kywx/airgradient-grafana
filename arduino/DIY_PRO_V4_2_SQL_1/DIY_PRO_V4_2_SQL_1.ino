@@ -90,7 +90,7 @@ boolean connectWIFI=true;
 boolean connectSQLITE=true;           // Can be set to "false" to stop attempting to connect to EISY
 boolean connectAPI=true;              // Can be set to "false" to stop attempting to connect to the AirGradient API
 uint16_t portNumber = 4000;           // Can be replaced with any number 1024 - 49151
-IPAddress host(192,168,1,3);          // Replace with the local IP address of your eisy  Ex. IPAddress host(192,168,1,232)
+IPAddress host(192,168,0,3);          // Replace with the local IP address of your eisy  Ex. IPAddress host(192,168,1,232)
 
 
 // CONFIGURATION END
