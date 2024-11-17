@@ -72,7 +72,7 @@ If you do not already have the Arduino IDE installed, you can install it [here](
 - line 61: your bucket name
 
 3. (Optional) Change lines 62-65
-- line 62: The name of the point variable. If you change this, you may need to update other components in this tutorial
+- line 62: The name of the point variable
 - line 63: how often the AirGradient will send data to InfluxDB(in minutes)
 - line 64: Set false if you don't want the data to be sent to InfluxDB
 - line 65: Set false if you don't want your air quality data to be sent to AirGradient's API
@@ -92,7 +92,6 @@ If you do not already have the Arduino IDE installed, you can install it [here](
 
 4. Click New and then new dashboard. Manually set up data source + other stuff.
 
-Grafana tutorial drops one day, but not today.
 
 
 

@@ -1,5 +1,4 @@
 # connect to the air gradient and extract data
-# in the mini processor
 import socket
 import json
 
@@ -26,8 +25,3 @@ def get_data(HOST, PORT) -> dict:
             if data == '0':
                 return 0    # error to log
             return json.loads(data)     # works only with one airgradient
-
-
-# if __name__ == "__main__":
-#     while True:
-#         print(get_data("192.168.x.x", 4000))
