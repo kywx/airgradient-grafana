@@ -43,10 +43,6 @@ Now, look at the navbar to the left. We are currently on "Buckets". We want to m
 
 
 
--CODBYI-78gc_5p1cG1EOUVFkYW-E0C5jpYSXlV7tKgx3qzFxyofI6Xd-FNoovssMmjlNpV1sOG5xTBkRJcD8w==
-
-
-
 ## Arduino Installation and Configuration
 
 ### Downloading the Arduino IDE
@@ -86,14 +82,35 @@ If you do not already have the Arduino IDE installed, you can install it [here](
 
 1. Set up the Grafana Stack in any deployment region.
 
-2. Go to Home > Dashboards.
+2. Launch Grafana Cloud.
 
-3. Click New and then import. Then upload the json file. Edit it to have your information and keys. This is a simple example.  You can customize as you like.
+3. Go to Home > Connections > Add new connection
 
-4. Click New and then new dashboard. Manually set up data source + other stuff.
+4. Search for InfluxDB as a data source (not as an integration). Click "Add new data source".
 
+5. Change the name to whatever you'd like. Toggle on the Default option. Change Query Language to "SQL" using the dropdown menu. Under HTTP, insert your URL(same as the one in the arduino code). Under Auth, turn on "Basic auth". Under InfluxDB details, insert your bucket name next to Database then insert your API token next to Token.
 
+6. Click "Save & Test". If it shows a green message saying "OK", you have succesfully connected to your database. If it is red, please ensure that the data you entered is correct.
 
+7. Now that you have the Data Source configured, you can finally create the dashboard. Go to Home > Dashboards.
+
+8. Click New > Import. If you want to create your own dashboard setup, you can go to New > New dashboard and figure it out yourself.
+
+9. Upload the grafana_template.json file from the repository. Change the name to whatever you want. Change the uid to anything but the original. Then click Import.
+
+10. You will see lots of errors. That is because the data source is not read properly yet. We need to let Grafana connect to each panel. Click the Edit button to enter edit mode. 
+
+11. Hover over the CO2 box. Click the 3 dots that appear on the top right of the box and click edit.
+
+12. Now you can click either "Back to dashboard" or "Refresh" to see your data show up. If there is still an error, your table name might be different from the preset one. In this case, you would have to go build your own SQL queries. You can go "Back to dashboard" and see the change on your dashboard. At the top, you can set the time from "Last 6 hours" to anything else.
+
+13. Make sure to click the "Save Dashboard" button after you make changes.
+
+14. This is a simple dashboard setup where you can monitor the progression of your air quality levels.
+
+15. Alerts?? Well... not yet.
+
+16. Troubleshooting? :
 
 
 ## Contact
