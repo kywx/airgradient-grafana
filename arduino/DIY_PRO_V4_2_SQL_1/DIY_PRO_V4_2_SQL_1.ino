@@ -59,8 +59,8 @@ CC BY-SA 4.0 Attribution-ShareAlike 4.0 International License
 #define INFLUXDB_TOKEN "FfSVI3SmPDt0I-s1PdwnxUw_jZnjTIwRRqRq2PQpdcgJRO0k6tPWZ6UU7OTC9aFXr_0a7DCxCTLLWs-SOsTGlw=="   // looks something like this
 #define INFLUXDB_ORG "Organization Name"    // Your organization name
 #define INFLUXDB_BUCKET "Bucket Name"       // Whatever you named the bucket you want to use
-Point sensor("air");                 // Any name
-int dataInterval = 5;                          // interval of time between gathering air quality data in minutes
+Point sensor("air");                 // Keep as air unless you want to change the name of the table(will mess with the importing a bit)
+int dataInterval = 5;             // interval of time between gathering air quality data in minutes
 boolean connectInfluxDB=true;     // set true to use InfluxDB and Grafana
 boolean connectAPI = true;        // set true to send data to AirGradient's API
 
