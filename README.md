@@ -27,11 +27,10 @@ Note: InfluxDB will only store up to 30 days of data for free. If you want to ke
 - Verify your account
 - Workspace details don't matter that much
 - Save/Remember your organization name
-- Your URL will depend on the Storage Provider of your choice, but it doesn't matter that much
+- Storage Provider of your choice
 
 ### List of Important Variables to Note
 - Organization name
-- URL
 - Bucket name
 - API Token
 
