@@ -51,6 +51,7 @@ If you do not already have the Arduino IDE installed, you can install it [here](
 - Go to Tools > Manage Libraries (or CTRL+SHIFT+I)
 - Install the "ESP8266 Influxdb" library (if the lastest version doesn't work, install the 3.13.2 version)
 - Install the 2.14.15 version "AirGradient Air Quality Sensor" library
+- Also install the following libraries : "WifiManager", "U8g2", "Sensirion I2C SGP41", "Sensirion Gas Index Algorithm", and "Arduino-SHT"
 
 ### Select Board and Port
 1. First, we need to select the board in the AirGradient. Go to Tools > Board:- > esp8266 > LOLIN(WEMOS) D1 mini(clone).
