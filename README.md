@@ -49,32 +49,42 @@ If you do not already have the Arduino IDE installed, you can install it [here](
 
 ### Installing Dependencies
 - Go to Tools > Manage Libraries (or CTRL+SHIFT+I)
-- Install the "ESP8266 Influxdb" library (if the lastest version doesn't work, install the 3.13.2 version)
-- Install the 2.14.15 version "AirGradient Air Quality Sensor" library
-- Also install the following libraries : "WifiManager", "U8g2", "Sensirion I2C SGP41", "Sensirion Gas Index Algorithm", and "Arduino-SHT"
+- Install the following libraries:
+    - ESP8266 Influxdb (if the lastest version doesn't work, install the 3.13.2 version)
+    - AirGradient Air Quality Sensor (2.4.15 version)
+    - WifiManager
+    - U8g2
+    - Sensirion I2C SGP41 (when prompted, click install all)
+    - Sensirion Gas Index Algorithm
+    - arduino-sht
+- Go to File > Preferences (or Arduino IDE > Settings for Mac)
+- In the Additional Board Manager URLs field, paste this link [http://arduino.esp8266.com/stable/package_esp8266com_index.json](http://arduino.esp8266.com/stable/package_esp8266com_index.json) and save
+- Go to Tools > Board > Boards Manager
+- Search for and install the latest version of "esp8266"
 
 ### Select Board and Port
 1. First, we need to select the board in the AirGradient. Go to Tools > Board:- > esp8266 > LOLIN(WEMOS) D1 mini(clone).
 
-2. Then, we need to select the port. In order to do this, we must connect the AirGradient's ESP8266 to a PC through a USB-C to USB cable. In order to access the ESP8266, we must unscrew and open up the back of the AirGradient. Then, you should see a USB-C port attached to the ESP8266. Attach the USB side to your PC. Now, in the Arduino IDE, you should be able to go to Tools > Port > COM[some number].
+2. Then, we need to select the port. In order to do this, we must connect the AirGradient's ESP8266 to a PC through a USB-C to USB cable. In order to access the ESP8266, we must unscrew and open up the back of the AirGradient. Then, you should see a USB-C port attached to the ESP8266. Attach the USB side to your PC. Now, in the Arduino IDE, you should be able to go to Tools > Port > COM[some number] (or /dev/cu... for Mac).
 
 ### Configuring the AirGradient ESP8266
-1. Download the arduino folder in the repository. Now open the .ino file in the Arduino IDE(File > Open).
+1. Clone the repository. Now open "arduino/DIY_PRO_V4_2_SQL_1/DIY_PRO_V4_2_SQL_1.ino" in the Arduino IDE(File > Open).
 
 2. Change lines 58-61
-- line 58: your influxdb url (you can check in your browser)
-- line 59: your api token
-- line 60: your organization name
-- line 61: your bucket name
+   - line 58: your influxdb url (you can check in your browser)
+   - line 59: your api token
+   - line 60: your organization name
+   - line 61: your bucket name
 
 3. (Optional) Change lines 62-65
-- line 62: The name of the point variable
-- line 63: how often the AirGradient will send data to InfluxDB(in minutes)
-- line 64: Set false if you don't want the data to be sent to InfluxDB
-- line 65: Set false if you don't want your air quality data to be sent to AirGradient's API
+   - line 62: The name of the point variable
+   - line 63: how often the AirGradient will send data to InfluxDB (in minutes)
+   - line 64: Set false if you don't want the data to be sent to InfluxDB
+   - line 65: Set false if you don't want your air quality data to be sent to AirGradient's API
 
 4. Upload the file onto the ESP8266
-- It's the button with the arrow(->)
+   - It's the button with the arrow (->) at the top
+   - Ignore the error during compiling, it will still be functional
 
 
 ## Create an account w/ Grafana Cloud
