@@ -2,7 +2,7 @@
 Display data gathered by an [AirGradient DIY Pro](https://www.airgradient.com/documentation/diy-pro-presoldered-v42/) on a dashboard using [Grafana](https://grafana.com/) and [InfluxDB](https://www.influxdata.com).
 
 ## About
-[AirGradient](https://www.airgradient.com/) creates air quality monitors, like the AirGradient DIY Pro, that can measure PM1, PM2.5, PM10, CO2, TVOC index, NOX index, temperature, and humidity levels. We will use InfluxDB to store and track periodic data gathered from the air quality monitor and then give Grafana access to that data in order to make a dashboard to create visuals and alerts in response to the current and trending air quality.
+[AirGradient](https://www.airgradient.com/) creates air quality monitors, like the AirGradient DIY Pro, that can measure PM1, PM2.5, PM10, CO2, TVOC index, NOX index, temperature, and humidity levels. We will use InfluxDB to store and track periodic data gathered from the air quality monitor and then give Grafana access to that data in order to make a dashboard to create visuals in response to the current and trending air quality.
 
 
 ### Examples
@@ -117,10 +117,6 @@ If you do not already have the Arduino IDE installed, you can install it [here](
 13. Make sure to click the "Save Dashboard" button after you make changes.
 
 14. This is a simple dashboard setup where you can monitor the progression of your air quality levels.
-
-15. Alerts?? Well... not yet.
-
-16. Troubleshooting? :
 
 
 ## Contact
