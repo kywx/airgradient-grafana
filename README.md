@@ -5,9 +5,6 @@ Display data gathered by an [AirGradient DIY Pro](https://www.airgradient.com/do
 [AirGradient](https://www.airgradient.com/) creates air quality monitors, like the AirGradient DIY Pro, that can measure PM1, PM2.5, PM10, CO2, TVOC index, NOX index, temperature, and humidity levels. We will use InfluxDB to store and track periodic data gathered from the air quality monitor and then give Grafana access to that data in order to make a dashboard to create visuals in response to the current and trending air quality.
 
 
-### Examples
-Insert photo + alt description + description
-
 ## Getting Started (Summary)
 - *Create an account* with InfluxDB Cloud.
 - **Save** the tokens from InfluxDB.
